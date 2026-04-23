@@ -1,0 +1,29 @@
+__pycache__/
+
+.Python
+wheels/
+__pypackages__/
+
+
+# Environments
+.env
+.envrc
+.venv
+.venv/
+env/
+venv/
+ENV/
+
+# MacOs
+.DS_Store
+.localized
+__MACOSX/
+.AppleDouble
+.LSOverride
+Icon[]
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
