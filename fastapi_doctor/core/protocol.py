@@ -6,6 +6,9 @@ from typing import Any
 
 class Rule(ABC):
     _registry: list[type[Rule]] = []
+    name: str
+    config: dict[str, Any]
+    priority: int
 
     def __init_subclass__(cls, **kwargs) -> None:
         super().__init_subclass__(**kwargs)
@@ -13,7 +16,7 @@ class Rule(ABC):
         Rule._registry.append(cls)
         
         cls.name = cls.__name__
-        cls.config: dict[str, Any] = kwargs
+        cls.config = kwargs
         cls.priority = kwargs.get("priority", 0)
 
     @abstractmethod
