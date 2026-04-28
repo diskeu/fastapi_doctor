@@ -1,7 +1,9 @@
 from __future__ import annotations
-from fastapi_doctor.core.engine import RouteInfo
 from abc import ABC, abstractmethod
-from typing import TypedDict, Any
+from typing import TypedDict, Callable, Any
+from collections.abc import Collection
+from dataclasses import dataclass
+from enum import Enum
 
 
 class Rule(ABC):
@@ -42,6 +44,29 @@ class Rule(ABC):
     @classmethod
     def iter_registry(cls):
         yield from Rule._registry
+
+
+@dataclass
+class RouteInfo():
+    path: str
+    endpoint: Callable[..., Any]
+    name: str
+
+    # Optional Metadata
+    methods: Collection[str] | None = None
+    status_code: int | None = None
+    response_model: Any | None = None
+    summary: str | None = None
+    description: str | None = None
+    tags: list[str | Enum] | None = None
+    deprecated: bool | None = None
+    strict_content_type: bool = True
+    include_in_schema: bool = True
+
+    @property
+    def auto_generated_name(self) -> bool:
+        return self.name == self.endpoint.__name__
+
 
 class Issue(TypedDict):
     type: str

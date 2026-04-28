@@ -1,31 +1,7 @@
-from typing import Callable, Any
-from collections.abc import Collection, Sequence
-from dataclasses import dataclass
-from enum import Enum
+from collections.abc import Sequence
 from fastapi.applications import FastAPI
 from fastapi.routing import APIRoute
-
-
-@dataclass
-class RouteInfo():
-    path: str
-    endpoint: Callable[..., Any]
-    name: str
-
-    # Optional Metadata
-    methods: Collection[str] | None = None
-    status_code: int | None = None
-    response_model: Any | None = None
-    summary: str | None = None
-    description: str | None = None
-    tags: list[str | Enum] | None = None
-    deprecated: bool | None = None
-    strict_content_type: bool = True
-    include_in_schema: bool = True
-
-    @property
-    def auto_generated_name(self) -> bool:
-        return self.name == self.endpoint.__name__
+from fastapi_doctor.core.protocol import RouteInfo
 
 
 def extract_routes(app: FastAPI) -> Sequence[RouteInfo]:
