@@ -1,7 +1,7 @@
 from __future__ import annotations
 from fastapi_doctor.core.engine import RouteInfo
 from abc import ABC, abstractmethod
-from typing import Any
+from typing import TypedDict, Any
 
 
 class Rule(ABC):
@@ -42,3 +42,12 @@ class Rule(ABC):
     @classmethod
     def iter_registry(cls):
         yield from Rule._registry
+
+class Issue(TypedDict):
+    type: str
+    level: str
+    issue: str
+    method: str
+    category: str
+    hint: str
+    route: RouteInfo
