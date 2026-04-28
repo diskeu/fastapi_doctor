@@ -3,6 +3,7 @@ objects like `Issues` or `Rules` need to look like. They can be for
 real validation of the correct fields or for development experience with
 a more permissive implemantation.
 
+
 # Rule
 Rule is a global class that holds a list of `Rule-Subclasses` and
 is a protocol with some logik behind it to keep track on all the definied
@@ -35,6 +36,14 @@ class MissingResponseModel(Rule, priority=4):
         # validating if the given Route is supported
         return True
 ``` 
+
+
+# RouteInfo
+Fastapi-doctor uses its own `RouteInfo` dataclass for a simpler abstraction
+of FastAPI's `APIRoute` class.
+The class is in contrast to the `APIRoute` class only for holding data,
+doesn't has any logic and only has necessary fields from the original class.
+
 
 # Issue
 A issue is the defined type a `Rule` returns when an `issue` in the given route
