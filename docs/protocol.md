@@ -1,12 +1,14 @@
 `Protocols` are a simple contract, that give info on how specific
-objects like `Issues` or `Rules` need to look like. The
-implementation is based on the `abc` module, instead of the more
-permissive `protocol` class.
+objects like `Issues` or `Rules` need to look like. They can be for
+real validation of the correct fields or for development experience with
+a more permissive implemantation.
 
 # Rule
 Rule is a global class that holds a list of `Rule-Subclasses` and
 is a protocol with some logik behind it to keep track on all the definied
 Rules.
+The implementation is based on the `abc` module, instead of the more
+permissive `protocol` class.
 For a a convinience behaviour when a new subclass is made, `_registry`
 stays the same among diffrent instances of `Rule`.
 
@@ -15,7 +17,8 @@ stays the same among diffrent instances of `Rule`.
 - a description method that returns a string telling what the Rule does
 - a `supports` method that needs to to have a route as input, returning a bool
   on wheter the Route is supported.
-when inheriting from the `Rules` class you can provide optional configuration via `kwargs`
+when inheriting from the `Rules` class you can provide optional configurations
+via `kwargs`
 
 ```python
 from fastapi_doctor.core.protocol import Rule
@@ -33,4 +36,7 @@ class MissingResponseModel(Rule, priority=4):
         return True
 ``` 
 
-    
+# Issue
+A issue is the defined type a `Rule` returns when an `issue` in the given route
+occures. It is built with inheriting from the permissive `TypedDict` class and
+doesn't has any real affect in the code execution.
