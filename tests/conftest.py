@@ -1,4 +1,4 @@
-from fastapi_doctor.core.protocol import RouteInfo, Issue
+from fastapi_doctor.core.protocol import RouteInfo, Issue, Rule
 from functools import partial
 from typing import Literal, Any
 from fastapi.testclient import TestClient
@@ -14,6 +14,11 @@ def test_client_factory(
         backend=anyio_backend_name,
         backend_options=anyio_backend_options 
     )
+
+
+@pytest.fixture(autouse=True)
+def clear_rule():
+    Rule._registry.clear()
 
 
 @pytest.fixture
