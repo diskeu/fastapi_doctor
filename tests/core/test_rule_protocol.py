@@ -1,6 +1,16 @@
 from fastapi_doctor.core.protocol import Rule, RouteInfo, Issue
 import pytest
 
+
+def test_rule_iter_registry(rule_subclass_factory):
+    test_rule1 = rule_subclass_factory()  
+    test_rule2 = rule_subclass_factory()
+    rules_generator = Rule.iter_registry()
+
+    assert next(rules_generator) is test_rule1
+    assert next(rules_generator) is test_rule2
+
+
 def test_add_invalid_rule(
     rule_call_method,
     rule_description_property,
