@@ -4,7 +4,6 @@ from typing import Literal, Any
 from fastapi.testclient import TestClient
 import pytest
 
-
 @pytest.fixture
 def test_client_factory(
     anyio_backend_name: Literal["asyncio", "Trio"],
@@ -18,7 +17,7 @@ def test_client_factory(
 
 
 @pytest.fixture
-def rule_call_method(route: RouteInfo) -> Issue:
+def rule_call_method() -> Issue:
     issue: Issue = {
         "type": "Issue",
         "level": "architectur",
@@ -26,7 +25,7 @@ def rule_call_method(route: RouteInfo) -> Issue:
         "method": "GET",
         "category": "architecture",
         "hint": "suggest adding missing response model",
-        "route": route
+        "route": "route"
     }
     return issue
 

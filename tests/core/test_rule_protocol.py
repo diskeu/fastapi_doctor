@@ -1,18 +1,21 @@
 from fastapi_doctor.core.protocol import Rule, RouteInfo, Issue
 import pytest
 
-
-def test_add_invalid_rule():
+def test_add_invalid_rule(
+    rule_call_method,
+    rule_description_property,
+    rule_supports_method
+):
 
     class MissingCallRule(Rule):
         # missing `__call__` method
 
         @property
         def description(self) -> str:
-            return "123"
+            return rule_description_property
 
         def supports(self, _: RouteInfo) -> bool:
-            return False
+            return rule_supports_method
         
     with pytest.raises(TypeError):
         MissingCallRule()
@@ -20,21 +23,12 @@ def test_add_invalid_rule():
 
     class MissingDescriptionRule(Rule):
         def __call__(self, route: RouteInfo) -> Issue:
-            issue: Issue = {
-                "type": "Issue",
-                "level": "architectur",
-                "issue": "missing_response_model",
-                "method": "GET",
-                "category": "architecture",
-                "hint": "suggest adding missing response model",
-                "route": route
-            }
-            return issue
+            return rule_call_method
         
         # missing `description`
 
         def supports(self, _: RouteInfo) -> bool:
-            return False
+            return rule_supports_method
         
     with pytest.raises(TypeError):
         MissingDescriptionRule()
@@ -42,20 +36,11 @@ def test_add_invalid_rule():
 
     class MissingSupportsRule(Rule):
         def __call__(self, route: RouteInfo) -> Issue:
-            issue: Issue = {
-                "type": "Issue",
-                "level": "architectur",
-                "issue": "missing_response_model",
-                "method": "GET",
-                "category": "architecture",
-                "hint": "suggest adding missing response model",
-                "route": route
-            }
-            return issue
+            return rule_call_method
 
         @property
         def description(self) -> str:
-            return "123"
+            return rule_description_property
 
         # missing `supports` method
 
