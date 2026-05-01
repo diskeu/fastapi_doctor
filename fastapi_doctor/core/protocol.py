@@ -22,7 +22,7 @@ class Rule(ABC):
         cls.priority = kwargs.get("priority", 0)
 
     @abstractmethod
-    def __call__(self, route: RouteInfo) -> dict[str, Any]:
+    def __call__(self, route: RouteInfo) -> Issue:
         ...
 
     @property
