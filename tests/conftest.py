@@ -1,6 +1,7 @@
+from __future__ import annotations
 from fastapi_doctor.core.protocol import RouteInfo, Issue, Rule
 from functools import partial
-from typing import Literal, Any
+from typing import Callable, Literal, Any
 from fastapi.testclient import TestClient
 import pytest
 
@@ -19,6 +20,27 @@ def test_client_factory(
 @pytest.fixture(autouse=True)
 def clear_rule():
     Rule._registry.clear()
+
+
+@pytest.fixture
+def rule_subclass_factory(
+    rule_call_method,
+    rule_description_property,
+    rule_supports_method
+) -> Callable[[], type[TestRule]]:
+    def _call() -> type[TestRule]:
+        class TestRule(Rule):
+            def __call__(self, _: RouteInfo) -> Issue:
+                return rule_call_method
+
+            @property
+            def description(self) -> str:
+                return rule_description_property
+
+            def supports(self, _: RouteInfo) -> bool:
+                return rule_supports_method
+        return TestRule
+    return _call
 
 
 @pytest.fixture
