@@ -23,27 +23,19 @@ class RouteVisitor(ast.NodeVisitor):
                     if (dec.func.value.id == self.app_name):   # type: ignore[attr-defined]
                         methods = []
 
-                        if dec.func.attr != "route":
+                        if dec.func.attr != "api_route":
                             methods = [dec.func.attr] 
 
                         if hasattr(dec, "args"):
                             path = dec.args[0].value            # type: ignore[attr-defined]
-
-                            # Methods can be also defined with
-                            # app.route("/", ["GET", "POST"])
-                            if len(dec.args) >= 2:
-                                methods.extend(
-                                    arg.value for arg
-                                    in dec.args[1].elts         # type: ignore[attr-defined]
-                                )
 
                         if hasattr(dec, "keywords"):
                             for keyword in dec.keywords:
                                 if keyword.arg == "path":
                                     path = keyword.value.value # type: ignore[attr-defined]
                                 
-                                # Methods can be also defined with
-                                # app.route("/", methods=["GET", "POST"])
+                                # Handlers can be also defined with
+                                # @app.api_route("/", methods=["GET", "POST"])
                                 elif keyword.arg == "methods":
                                     methods.extend(
                                         const.value for const

@@ -2,7 +2,7 @@ from typing import Callable
 from fastapi.applications import FastAPI
 from fastapi.testclient import TestClient
 from fastapi import APIRouter
-from fastapi_doctor.core.engine import (
+from fastapi_doctor.core.extraction.runtime import (
     extract_routes,
     RouteInfo
 )
@@ -10,7 +10,6 @@ from fastapi_doctor.core.engine import (
 
 def test_extract_routes() -> None:
     router = APIRouter()
-
     @router.get("/")
     def foo():
         return {"123": "abc"}
