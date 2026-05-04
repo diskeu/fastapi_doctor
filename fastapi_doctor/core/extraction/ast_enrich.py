@@ -55,11 +55,18 @@ class RouteVisitor(ast.NodeVisitor):
                                 self.route_bodies[(method, path)] = node
 
 
-def extract_route_bodies(location: Path | str, app_name: str) -> dict[tuple[str, str], ast.FunctionDef]:
+def extract_route_bodies(
+    location: Path | str | None,
+    app_name: str,
+    *,
+    debug_content: str = ""
+) -> dict[tuple[str, str], ast.FunctionDef]:
+
     if isinstance(location, str):
         location = Path(location)
-    content = location.read_text(encoding="utf-8")
-            
+
+    content = location.read_text(encoding="utf-8") if location else debug_content
+         
     tree = ast.parse(
         source=content,
         mode="exec",
