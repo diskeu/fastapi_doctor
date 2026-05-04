@@ -24,7 +24,7 @@ class RouteVisitor(ast.NodeVisitor):
                         methods = []
 
                         if dec.func.attr != "api_route":
-                            methods = [dec.func.attr] 
+                            methods = [dec.func.attr.upper()] 
 
                         if hasattr(dec, "args"):
                             path = dec.args[0].value            # type: ignore[attr-defined]
