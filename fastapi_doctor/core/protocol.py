@@ -4,6 +4,7 @@ from typing import TypedDict, Callable, Any
 from collections.abc import Collection
 from dataclasses import dataclass
 from enum import Enum
+from ast import FunctionDef
 
 
 class Rule(ABC):
@@ -62,6 +63,9 @@ class RouteInfo():
     deprecated: bool | None = None
     strict_content_type: bool = True
     include_in_schema: bool = True
+
+    # Optional ast - Route information
+    body: FunctionDef | None = None
 
     @property
     def auto_generated_name(self) -> bool:
