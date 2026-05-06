@@ -52,9 +52,9 @@ class RouteInfo():
     path: str
     endpoint: Callable[..., Any]
     name: str
+    methods: Collection[str]
 
     # Optional Metadata
-    methods: Collection[str] | None = None
     status_code: int | None = None
     response_model: Any | None = None
     summary: str | None = None
@@ -65,7 +65,7 @@ class RouteInfo():
     include_in_schema: bool = True
 
     # Optional ast - Route information
-    body: FunctionDef | None = None
+    body: dict[str, FunctionDef] | None = None # [Method: FunctionDef]
 
     @property
     def auto_generated_name(self) -> bool:

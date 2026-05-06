@@ -14,9 +14,9 @@ def extract_routes(app: FastAPI) -> Sequence[RouteInfo]:
                     path=route.path,
                     endpoint=route.endpoint,
                     name=route.name,
+                    methods=route.methods,
 
                     # Optional Metadata
-                    methods=route.methods,
                     status_code=route.status_code,
                     response_model=route.response_model,
                     summary=route.summary,
