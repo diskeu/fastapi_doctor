@@ -22,12 +22,12 @@ when inheriting from the `Rules` class you can provide optional configurations
 via `kwargs`
 
 ```python
-from fastapi_doctor.core.protocol import Rule
+from fastapi_doctor.core.protocol import Rule, Issue
 
 class MissingResponseModel(Rule, priority=4):
-    def __call__(self, route):
+    def __call__(self, route) -> Issue:
         # logik
-        ... # -> should return Issue
+        ...
 
     def description(self) -> str:
         return "What the Route does"
