@@ -1,5 +1,6 @@
 from fastapi_doctor.core.auto_registration import rule
 from fastapi_doctor.core.protocol import Rule, RouteInfo
+import pytest
 
 
 def test_valid_class_auto_registration():
@@ -22,8 +23,14 @@ def test_valid_class_auto_registration():
     valid_rule.supports(None)
 
 
-def test_invalid_class_auto_registration_():
-    ...
+def test_invalid_class_auto_registration():
+    @rule()
+    class InvalidRule():
+        ...
+
+    assert InvalidRule in Rule._registry
+    with pytest.raises(TypeError):
+        invalid_rule = InvalidRule()
 
 
 def test_rule_function_parameters():
