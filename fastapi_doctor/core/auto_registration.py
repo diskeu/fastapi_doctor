@@ -19,7 +19,7 @@ def rule(*, config: dict[str, Any] | None = None, priority: int | None = None) -
         }
 
         rule: type[Rule] = type(name, bases, methods)
-        if config: rule.config = cls.config | config
+        if config: rule.config = config
         if priority is not None: rule.priority = priority
 
         return rule
