@@ -49,12 +49,3 @@ def test_rule_function_parameters():
     assert ValidRule in Rule._registry
     assert ValidRule.config == {"123": "abc"}
     assert ValidRule.priority == 4
-
-
-def test_class_declaration_values_overwrite():
-    """
-    Test declaring `config and priority` in class and overwritting
-    them with the `rule` decorator function parameters.
-    """
-    ...
-
