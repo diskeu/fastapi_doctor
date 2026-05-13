@@ -35,7 +35,28 @@ class MissingResponseModel(Rule, priority=4):
     def supports(self, Route) -> bool:
         # validating if the given Route is supported
         return True
-``` 
+```
+## auto_registration
+Rules can be also created via defining a normal class that has
+`__call__`, `description` and `supprots` method and using the `@rule`
+decorator. `priority` and `config` can still be created via parsing them
+as keyword arguments to the decorator.
+```python
+from fastapi_doctor.core.protocol import Issue
+
+@rule(config={"abc": 123, priority=4})
+class MissingResponseModel():
+    def __call__(self, route) -> Issue:
+        # logik
+        ...
+
+    def description(self) -> str:
+        return "What the Route does"
+    
+    def supports(self, Route) -> bool:
+        # validating if the given Route is supported
+        return True
+```
 
 
 # RouteInfo
