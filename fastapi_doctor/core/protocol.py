@@ -12,6 +12,7 @@ class Rule(ABC):
     name: str
     config: dict[str, Any]
     priority: int
+    depend_on_ast: bool
 
     def __init_subclass__(cls, **kwargs) -> None:
         super().__init_subclass__(**kwargs)
@@ -21,6 +22,7 @@ class Rule(ABC):
         cls.name = cls.__name__
         cls.config = kwargs
         cls.priority = kwargs.get("priority", 0)
+        cls.depend_on_ast = kwargs.get("depend_on_ast", False)
 
     @abstractmethod
     def __call__(self, route: RouteInfo) -> Issue | None:

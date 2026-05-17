@@ -24,7 +24,7 @@ via `kwargs`
 ```python
 from fastapi_doctor.core.protocol import Rule, Issue
 
-class MissingResponseModel(Rule, priority=4):
+class MissingResponseModel(Rule, priority=4, depend_on_ast=True):
     def __call__(self, route) -> Issue | None:
         # logik
         ...
@@ -44,7 +44,7 @@ as keyword arguments to the decorator.
 ```python
 from fastapi_doctor.core.protocol import Issue
 
-@rule(config={"abc": 123, priority=4})
+@rule(config={"abc": 123}, priority=4, depend_on_ast=True)
 class MissingResponseModel():
     def __call__(self, route) -> Issue | None:
         # logik

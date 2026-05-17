@@ -2,7 +2,7 @@ from fastapi_doctor.core.protocol import Rule
 from typing import Any, Callable
 
 
-def rule(*, config: dict[str, Any] | None = None, priority: int | None = None) -> Callable[[type[Any]], type[Rule]]:
+def rule(*, config: dict[str, Any] | None = None, priority: int | None = None, depend_on_ast: bool = False) -> Callable[[type[Any]], type[Rule]]:
     def inner(cls) -> type[Rule]:
         name: str = cls.__name__
 
@@ -21,6 +21,7 @@ def rule(*, config: dict[str, Any] | None = None, priority: int | None = None) -
         rule: type[Rule] = type(name, bases, methods)
         if config: rule.config = config
         if priority is not None: rule.priority = priority
+        if depend_on_ast: rule.depend_on_ast = depend_on_ast
 
         return rule
     return inner
