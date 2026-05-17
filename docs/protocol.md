@@ -14,7 +14,7 @@ For a a convinience behaviour when a new subclass is made, `_registry`
 stays the same among diffrent instances of `Rule`.
 
 `Rules` need to provide the following things
-- a __call__ method that returns a `Issue`
+- a __call__ method that returns a `Issue` or `None` if no vulerability is found
 - a description method that returns a string telling what the Rule does
 - a `supports` method that needs to to have a route as input, returning a bool
   on wheter the Route is supported.
@@ -25,7 +25,7 @@ via `kwargs`
 from fastapi_doctor.core.protocol import Rule, Issue
 
 class MissingResponseModel(Rule, priority=4):
-    def __call__(self, route) -> Issue:
+    def __call__(self, route) -> Issue | None:
         # logik
         ...
 
@@ -46,7 +46,7 @@ from fastapi_doctor.core.protocol import Issue
 
 @rule(config={"abc": 123, priority=4})
 class MissingResponseModel():
-    def __call__(self, route) -> Issue:
+    def __call__(self, route) -> Issue | None:
         # logik
         ...
 
