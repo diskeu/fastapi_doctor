@@ -26,7 +26,7 @@ class Executor():
     def __call__(self):
         issues: list[Issue] = []
         routes = extract_routes(self.app)
-        skipped_rules: list[type[Rule]] = []
+        skipped_rules: list[str] = []
 
         if self.ast_enrichment:
             merge(
@@ -45,5 +45,5 @@ class Executor():
                         if returned_issue := rule_instance(route):
                             issues.append(returned_issue)
                 else:
-                    skipped_rules.append(rule)
+                    skipped_rules.append(rule.name)
                     
