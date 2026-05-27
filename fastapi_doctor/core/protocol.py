@@ -79,4 +79,4 @@ class Issue(TypedDict):
     methods: list[str]
     categories: list[str]
     hint: str
-    route: RouteInfo
+    route_info: dict[Any, Any]
