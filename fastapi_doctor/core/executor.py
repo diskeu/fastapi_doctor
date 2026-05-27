@@ -74,10 +74,9 @@ class Executor():
                         "routes": skipped_rules
                     }
                 },
-                "routes": [asdict(route_info) for route_info in routes],
                 # Maybe consider to make every issue part of a Rule
                 "issues": issues,
-                "routes": routes,
+                "routes": [asdict(route_info) for route_info in routes]
             }
         )
 
