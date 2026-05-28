@@ -72,10 +72,7 @@ class Executor():
                     "total_routes": len(routes),
                     "total_rules": len(Rule._registry),
                     "issues_collected": len_issues,
-                    "skipped_rules": {
-                        "amount": len_issues,
-                        "routes": skipped_rules
-                    }
+                    "skipped_rules": skipped_rules
                 },
                 "rule_issues": rules_issue_mapping,
                 "routes": [asdict(route_info) for route_info in routes]
