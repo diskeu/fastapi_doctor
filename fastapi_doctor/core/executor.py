@@ -53,15 +53,15 @@ class Executor():
             )
         rule_instance: Rule
         for rule in Rule.iter_registry_sorted():
-            rule_instance = rule()
-            for route in routes:
-                if rule.depend_on_ast == (True if self.ast_enrichment else False): # TODO: Potential Issue
+            if not rule.depend_on_ast or self.ast_enrichment:
+                rule_instance = rule()
+                for route in routes:
                     if rule_instance.supports(route):
                         if returned_issue := rule_instance(route):
                             rules_issue_mapping[rule.name].append(returned_issue)
                             len_issues += 1
-                else:
-                    skipped_rules.append(rule.name)
+            else:
+                skipped_rules.append(rule.name)
 
         # Only provide necessary information, things like `executed rules`,
         # `rules skipped due no support`, can be calculated later. Provide
