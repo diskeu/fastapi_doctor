@@ -3,7 +3,8 @@ from fastapi_doctor.core.extraction.runtime import extract_routes
 from fastapi_doctor.core.merge import merge
 from fastapi_doctor.core.protocol import Rule, Issue
 from fastapi import FastAPI
-from typing import Sequence
+from typing import Sequence, Any
+from collections import defaultdict
 from pathlib import Path
 from os import getenv
 from dataclasses import asdict
@@ -37,9 +38,10 @@ class Executor():
             self.json_output_location_arg = json_output_location_arg
 
     def __call__(self) -> str:
-        issues: list[Issue] = []
         routes = extract_routes(self.app)
         skipped_rules: list[str] = []
+        rules_issue_mapping: dict[str, list[Issue]] = defaultdict(list)
+        len_issues: int = 0
 
         if self.ast_enrichment:
             merge(
@@ -56,7 +58,8 @@ class Executor():
                 if rule.depend_on_ast == (True if self.ast_enrichment else False): # TODO: Potential Issue
                     if rule_instance.supports(route):
                         if returned_issue := rule_instance(route):
-                            issues.append(returned_issue)
+                            rules_issue_mapping[rule.name].append(returned_issue)
+                            len_issues += 1
                 else:
                     skipped_rules.append(rule.name)
 
@@ -68,14 +71,13 @@ class Executor():
                 "summary": {
                     "total_routes": len(routes),
                     "total_rules": len(Rule._registry),
-                    "issues_collected": len(issues),
+                    "issues_collected": len_issues,
                     "skipped_rules": {
-                        "amount": len(skipped_rules),
+                        "amount": len_issues,
                         "routes": skipped_rules
                     }
                 },
-                # Maybe consider to make every issue part of a Rule
-                "issues": issues,
+                "rule_issues": rules_issue_mapping,
                 "routes": [asdict(route_info) for route_info in routes]
             }
         )
