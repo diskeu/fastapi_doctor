@@ -1,11 +1,9 @@
-
-from collections.abc import Sequence
 from fastapi.applications import FastAPI
 from fastapi.routing import APIRoute
 from fastapi_doctor.core.protocol import RouteInfo
 
 
-def extract_routes(app: FastAPI) -> Sequence[RouteInfo]:
+def extract_routes(app: FastAPI) -> list[RouteInfo]:
     routes: list = []
     for route in app.routes:
         if isinstance(route, APIRoute):

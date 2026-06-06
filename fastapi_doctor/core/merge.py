@@ -1,8 +1,7 @@
-from typing import Sequence
 from fastapi_doctor.core.protocol import RouteInfo
 from ast import FunctionDef
 
-def merge(route_infos: Sequence[RouteInfo], route_bodies: dict[tuple[str, str], FunctionDef]) -> None:
+def merge(route_infos: list[RouteInfo], route_bodies: dict[tuple[str, str], FunctionDef]) -> None:
     """
     Enriches/Merges the `route_infos` with `route_bodies`
     """
