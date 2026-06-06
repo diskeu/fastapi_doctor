@@ -1,6 +1,6 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
-from typing import TypedDict, Callable, Any
+from typing import TypedDict, Callable, NotRequired, Any
 from collections.abc import Collection
 from dataclasses import dataclass
 from enum import Enum
@@ -79,4 +79,5 @@ class Issue(TypedDict):
     methods: list[str]
     categories: list[str]
     hint: str
-    route_info: dict[Any, Any]
+    # Will be added in the Executor
+    route_info: NotRequired[dict[Any, Any]]

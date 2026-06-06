@@ -58,6 +58,7 @@ class Executor():
                 for route in routes:
                     if rule_instance.supports(route):
                         if returned_issue := rule_instance(route):
+                            returned_issue["route_info"] = asdict(route)
                             rules_issue_mapping[rule.name].append(returned_issue)
                             len_issues += 1
             else:
