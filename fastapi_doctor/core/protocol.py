@@ -78,7 +78,7 @@ class Issue(TypedDict):
     type: str
     level: str
     issue: str
-    method: str
-    category: str
+    methods: list[str]
+    categories: list[str]
     hint: str
     route: RouteInfo

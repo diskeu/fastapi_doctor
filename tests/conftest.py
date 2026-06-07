@@ -49,8 +49,8 @@ def rule_call_method() -> Issue:
         "type": "Issue",
         "level": "architectur",
         "issue": "missing_response_model",
-        "method": "GET",
-        "category": "architecture",
+        "methods": ["GET"],
+        "categories": ["architecture"],
         "hint": "suggest adding missing response model",
         "route": "route"
     }
