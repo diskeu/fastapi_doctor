@@ -1,7 +1,7 @@
 from fastapi_doctor.core.extraction.ast_enrich import extract_route_bodies
 from fastapi_doctor.core.extraction.runtime import extract_routes
 from fastapi_doctor.core.merge import merge
-from fastapi_doctor.core.protocol import Rule, Issue
+from fastapi_doctor.core.protocol import Rule, RouteInfo, Issue
 from fastapi import FastAPI
 from typing import Sequence, Any
 from collections import defaultdict
@@ -38,10 +38,14 @@ class Executor():
             self.json_output_location_arg = json_output_location_arg
 
     def __call__(self) -> str:
-        routes = extract_routes(self.app)
+        routes: list[RouteInfo] = extract_routes(self.app)
         skipped_rules: list[str] = []
         rules_issue_mapping: dict[str, list[Issue]] = defaultdict(list)
         len_issues: int = 0
+
+        routes_asdict: list[dict[str, Any]] = [
+            asdict(route) for route in routes
+        ]
 
         if self.ast_enrichment:
             merge(
@@ -55,10 +59,10 @@ class Executor():
         for rule in Rule.iter_registry_sorted():
             if not rule.depend_on_ast or self.ast_enrichment:
                 rule_instance = rule()
-                for route in routes:
+                for route, route_asdict in zip(routes, routes_asdict):
                     if rule_instance.supports(route):
                         if returned_issue := rule_instance(route):
-                            returned_issue["route_info"] = asdict(route)
+                            returned_issue["route_info"] = route_asdict
                             rules_issue_mapping[rule.name].append(returned_issue)
                             len_issues += 1
             else:
@@ -76,7 +80,8 @@ class Executor():
                     "skipped_rules": skipped_rules
                 },
                 "rule_issues": rules_issue_mapping,
-                "routes": [asdict(route_info) for route_info in routes]
+                # routes in json need to be converted into a simple dict
+                "routes": routes_asdict
             }
         )
 
