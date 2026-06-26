@@ -3,6 +3,7 @@ from fastapi_doctor.core.protocol import RouteInfo, Issue, Rule
 from functools import partial
 from typing import Callable, Literal, Any
 from fastapi.testclient import TestClient
+from fastapi import FastAPI
 import pytest
 
 @pytest.fixture
@@ -65,3 +66,22 @@ def rule_description_property() -> str:
 @pytest.fixture
 def rule_supports_method() -> bool:
     return True
+
+@pytest.fixture
+def sample_app() -> FastAPI:
+    app = FastAPI()
+
+    @app.get("/foo")
+    def foo(): ...
+
+    @app.api_route("/fizz", methods=["GET", "POST"])
+    def fizz(): ...
+
+    @app.api_route("/buzz", methods=["GET", "POST"])
+    def buzz(): ...
+
+    @app.get("/brazz")
+    @app.post("/brazz")
+    def brazz(): ...
+
+    return app
