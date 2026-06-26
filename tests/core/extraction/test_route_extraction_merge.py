@@ -5,44 +5,13 @@ from fastapi_doctor.core.merge import merge
 from fastapi import FastAPI
 from ast import FunctionDef
 
-def test_route_extraction_merge():
-    app = FastAPI()
+def test_route_extraction_merge(sample_app, sample_app_content) -> None:
 
-    app_content = (
-"""
-@app.get("/foo")
-def foo(): ...
-
-@app.api_route("/fizz", methods=["GET", "POST"])
-def fizz(): ...
-
-@app.get("/")
-@app.api_route("/buzz", methods=["GET", "POST"])
-def buzz(): ...
-
-@app.get("/brazz")
-@app.post("/brazz")
-def foo(): ...
-""")
-    @app.get("/foo")
-    def foo(): ...
-
-    @app.api_route("/fizz", methods=["GET", "POST"])
-    def fizz(): ...
-
-    @app.get("/")
-    @app.api_route("/buzz", methods=["GET", "POST"])
-    def buzz(): ...
-
-    @app.get("/brazz")
-    @app.post("/brazz")
-    def foo(): ...
-
-    route_infos = extract_routes(app) 
+    route_infos = extract_routes(sample_app) 
     route_bodies = extract_route_bodies(
         location=None,
         app_name="app",
-        debug_content=app_content
+        debug_content=sample_app_content
     )
     merge(
         route_infos=route_infos,
