@@ -34,7 +34,7 @@ def test_invalid_class_auto_registration():
 
 
 def test_rule_function_parameters():
-    @rule(config={"123": "abc"}, priority=4)
+    @rule(config={"123": "abc", "priority": 4})
     class ValidRule():
         def __call__(self, route: RouteInfo):
             ...
@@ -47,5 +47,5 @@ def test_rule_function_parameters():
             ...
 
     assert ValidRule in Rule._registry
-    assert ValidRule.config == {"123": "abc"}
+    assert ValidRule.config == {"123": "abc", "priority": 4}
     assert ValidRule.priority == 4
