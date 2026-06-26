@@ -85,3 +85,21 @@ def sample_app() -> FastAPI:
     def brazz(): ...
 
     return app
+
+@pytest.fixture
+def sample_app_content() -> str:
+    return (
+"""
+@app.get("/foo")
+def foo(): ...
+
+@app.api_route("/fizz", methods=["GET", "POST"])
+def fizz(): ...
+
+@app.api_route("/buzz", methods=["GET", "POST"])
+def buzz(): ...
+
+@app.get("/brazz")
+@app.post("/brazz")
+def buzz(): ...
+""")
