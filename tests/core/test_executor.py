@@ -28,13 +28,14 @@ def test_executor_issue_output(
 ) -> None:
     rule_subclass_factory()
 
-    file: Path = tmp_path / "sample_app_content"
-
-    file.write_text(sample_app_content)
+    d = tmp_path / "sample_app_content"
+    d.mkdir()
+    p = d / "sample_app_content.py"
+    p.write_text(sample_app_content)
 
     json_issues_output = Executor(
         sample_app,
-        {"location": file.as_uri(), "app_name": "app"}
+        {"location": str(p), "app_name": "app"}
     )()
     issues = loads(json_issues_output)
 
