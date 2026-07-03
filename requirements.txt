@@ -1,4 +1,7 @@
 pytest==9.1.1
-fastapi>=0.137.2
+# since `app.routes` got refactored in 0.137.0 and
+# `iter_route_contexts` got introduced in 0.137.2,
+# version 0.137.0 and 0.137.1 are not supported
+fastapi!=0.137.0,!=0.137.1
 uvicorn[standard]
 httpx2
