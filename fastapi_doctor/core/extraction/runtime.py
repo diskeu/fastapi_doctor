@@ -1,11 +1,15 @@
 from fastapi.applications import FastAPI
-from fastapi.routing import APIRoute
+# iter_route_contexts is only supported in fastapi >= 0.137.2
+from fastapi.routing import APIRoute, iter_route_contexts
 from fastapi_doctor.core.protocol import RouteInfo
+from starlette.routing import BaseRoute
 
 
 def extract_routes(app: FastAPI) -> list[RouteInfo]:
     routes: list = []
-    for route in app.routes:
+
+    for ctx in iter_route_contexts(app.routes):
+        route: BaseRoute = ctx.original_route
         if isinstance(route, APIRoute):
             routes.append(
                 RouteInfo(
