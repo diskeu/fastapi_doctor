@@ -20,7 +20,6 @@ except ImportError:
 
     def _iter_api_routes(app: FastAPI) -> Iterator[APIRoute]:
         for route in app.routes:
-            print("ROUTE ", route)
             if isinstance(route, APIRoute):
                 yield route
         # return (
