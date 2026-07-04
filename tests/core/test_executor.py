@@ -21,15 +21,29 @@ def assert_issue_output_summary(
     assert len(summary["skipped_rules"]) == (1 if not with_ast else 0)
 
 
+def assert_issue_output_rule_issues(
+        rule_issues: dict[str, list[Issue]]
+    ) -> None:
+    for rule in Rule.iter_registry_sorted():
+        issues = rule_issues[rule.name]
+
+        for issue in issues:
+            assert type(issue["type"]) == str
+            assert type(issue["level"]) == str
+            assert type(issue["hint"]) == str
+            assert type(issue["route_info"]) == dict
+
+            assert type(issue["methods"]) == list
+            methods: set[type] = {type(method) for method in issue["methods"]}
+            assert methods == {str}
+
+            assert type(issue["categories"]) == list
+            categories: set[type] = {type(category) for category in issue["categories"]}
+            assert categories == {str}
+
+
 def assert_issue_output_routes(
         routes: list[dict[str, Any]],
-        with_ast: bool = False
-    ) -> None:
-    ...
-
-
-def assert_issue_output_rule_issues(
-        rule_issues: dict[str, list[Issue]],
         with_ast: bool = False
     ) -> None:
     ...
@@ -71,8 +85,8 @@ def test_executor_issue_output_with_ast(
     issues = loads(json_issues_output)
 
     assert_issue_output_summary(issues["summary"], with_ast=True)
+    assert_issue_output_rule_issues(issues["rule_issues"])
     assert_issue_output_routes(issues["routes"], with_ast=True)
-    assert_issue_output_rule_issues(issues["rule_issues"], with_ast=True)
 
 
 def test_executor_json_output_env() -> None:
