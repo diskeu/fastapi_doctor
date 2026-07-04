@@ -29,8 +29,8 @@ def rule_subclass_factory(
     rule_description_property,
     rule_supports_method
 ) -> Callable[[], type[TestRule]]:
-    def _call() -> type[TestRule]:
-        class TestRule(Rule):
+    def _call(*, depend_on_ast: bool = False) -> type[TestRule]:
+        class TestRule(Rule, depend_on_ast=depend_on_ast):
             def __call__(self, _: RouteInfo) -> Issue:
                 return rule_call_method
 
