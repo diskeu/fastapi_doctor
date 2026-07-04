@@ -18,7 +18,7 @@ class Executor():
         /,
         ast_enrichment: dict[str, str] | None = None,
         json_output: bool = False,
-        json_output_location_arg: str | None = None
+        json_output_location_arg: Path | None = None
     ):
         """
         Initialises an Exectur object.
@@ -30,6 +30,8 @@ class Executor():
         :param json_output: If True, the output will be written in the output file specified in the CLI-Arguments or
         JSON_OUTPUT environment variable
         :type json_output: bool
+        :param json_output_location_arg
+        :type json_output_location_arg: Path | None
         """
         self.app = app
         self.json_output = json_output
@@ -88,12 +90,17 @@ class Executor():
 
         # Writing json output to `json_output` file
         if self.json_output:
-            output_location: Path
+            output_location: Path | None = None
             if hasattr(self, "json_output_location_arg"):
-                output_location = Path(self.json_output_location_arg)
+                output_location = self.json_output_location_arg
             else:
-                output_location = Path(getenv("JSON_OUTPUT", ""))
-            if output_location:
+                if json_output_env := getenv("JSON_OUTPUT", ""): 
+                    output_location = Path(json_output_env)
+            if (
+                output_location and
+                output_location.exists() and
+                output_location.is_file()
+            ):
                 with open(output_location) as json_output_file:
                     json_output_file.write(json_issues_output)
 
