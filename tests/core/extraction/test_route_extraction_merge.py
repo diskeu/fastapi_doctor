@@ -20,7 +20,7 @@ def test_route_extraction_merge(sample_app, sample_app_content) -> None:
     for route in route_infos:
         assert isinstance(route, RouteInfo)
         assert isinstance(route.path, str)
-        assert callable(route.endpoint)
+        assert isinstance(route.endpoint, str)
         assert isinstance(route.name, str)
         for method in route.methods:
             assert isinstance(route.body[method], FunctionDef)

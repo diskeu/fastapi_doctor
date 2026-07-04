@@ -35,7 +35,7 @@ def extract_routes(app: FastAPI) -> list[RouteInfo]:
         routes.append(
             RouteInfo(
                 path=route.path,
-                endpoint=route.endpoint,
+                endpoint=route.endpoint.__name__,
                 name=route.name,
                 methods=route.methods,
 

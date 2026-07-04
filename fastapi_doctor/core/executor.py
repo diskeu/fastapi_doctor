@@ -82,7 +82,8 @@ class Executor():
                 "rule_issues": rules_issue_mapping,
                 # routes in json need to be converted into a simple dict
                 "routes": routes_asdict
-            }
+            },
+            default=list
         )
 
         # Writing json output to `json_output` file

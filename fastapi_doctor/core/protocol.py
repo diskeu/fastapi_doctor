@@ -50,7 +50,7 @@ class Rule(ABC):
 @dataclass
 class RouteInfo():
     path: str
-    endpoint: Callable[..., Any]
+    endpoint: str # endpoint.__name__
     name: str
     methods: Collection[str]
 

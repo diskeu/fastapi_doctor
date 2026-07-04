@@ -25,5 +25,5 @@ def test_extract_routes() -> None:
     for route in routes:
         assert isinstance(route, RouteInfo)
         assert isinstance(route.path, str)
-        assert callable(route.endpoint)
+        assert isinstance(route.endpoint, str)
         assert isinstance(route.name, str)
