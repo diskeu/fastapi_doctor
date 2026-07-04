@@ -118,8 +118,29 @@ def test_executor_issue_output_with_ast(
     assert_issue_output_routes(issues["routes"])
 
 
-def test_executor_json_output_env() -> None:
-    ...
+def test_executor_json_output_env(
+    sample_app,
+    rule_subclass_factory,
+    tmp_path
+) -> None:
+    rule_subclass_factory(depend_on_ast=False)
+    rule_subclass_factory(depend_on_ast=True)
+
+    d = tmp_path / "json_output"
+    d.mkdir()
+    file_path = d / "issue_output.json"
+
+    environ["JSON_OUTPUT"] = str(file_path)
+
+    json_issue_output = Executor(
+        sample_app,
+        json_output=True
+    )()
+
+    setup_and_assert_executor_json_output_file(
+        json_issue_output,
+        file_path
+    )
 
 
 def test_executor_json_output_file(
@@ -140,4 +161,7 @@ def test_executor_json_output_file(
         json_output_location_arg=file_path
     )()
     
-    setup_and_assert_executor_json_output_file(json_issue_output, file_path)
+    setup_and_assert_executor_json_output_file(
+        json_issue_output,
+        file_path
+    )
