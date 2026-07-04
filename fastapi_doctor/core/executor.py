@@ -2,8 +2,9 @@ from fastapi_doctor.core.extraction.ast_enrich import extract_route_bodies
 from fastapi_doctor.core.extraction.runtime import extract_routes
 from fastapi_doctor.core.merge import merge
 from fastapi_doctor.core.protocol import Rule, RouteInfo, Issue
+from fastapi_doctor.core.exceptions import PathNotFoundError
 from fastapi import FastAPI
-from typing import Sequence, Any
+from typing import Any
 from collections import defaultdict
 from pathlib import Path
 from os import getenv
@@ -96,12 +97,10 @@ class Executor():
             else:
                 if json_output_env := getenv("JSON_OUTPUT", ""): 
                     output_location = Path(json_output_env)
-            if (
-                output_location and
-                output_location.exists() and
-                output_location.is_file()
-            ):
-                with open(output_location) as json_output_file:
-                    json_output_file.write(json_issues_output)
+            if output_location:
+                if not output_location.parent.exists():
+                    raise PathNotFoundError(f"{output_location.parent} can't be found.")
+
+                output_location.write_text(json_issues_output)
 
         return json_issues_output
