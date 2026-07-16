@@ -1,7 +1,9 @@
 from fastapi_doctor.core.executor import Executor
 
+from os import environ
 from json import loads
 from typing import Any
+from pathlib import Path
 from fastapi_doctor.core.protocol import Rule, Issue
 from fastapi_doctor.core.executor import Executor
 
@@ -50,6 +52,30 @@ def assert_issue_output_routes(
         assert isinstance(route["path"], str)
         assert isinstance(route["endpoint"], str)
         assert isinstance(route["name"], str)
+
+
+def setup_and_assert_executor_json_output_file(
+    json_issue_output: str,
+    issue_output_path: Path
+):
+    # first verifying the output itself and then validating
+    # if `json_issue_output` == `json_issue_output_file`
+    # avoids additional file output specific test cases
+    issues = loads(json_issue_output)
+
+    assert_issue_output_summary(issues["summary"])
+    assert_issue_output_rule_issues(issues["rule_issues"])
+    assert_issue_output_routes(issues["routes"])
+
+    json_issue_output_file = issue_output_path.read_text()
+
+    # avoids assertion exceptions due missing spaces or line breaks
+    # after reading the output
+    json_issue_output.replace(" ", "").replace("\n", "")
+    json_issue_output_file.replace(" ", "").replace("\n", "")
+
+    assert json_issue_output_file
+    assert json_issue_output_file == json_issue_output
 
 
 def test_executor_issue_output_without_ast(
@@ -108,27 +134,10 @@ def test_executor_json_output_file(
     d.mkdir()
     file_path = d / "issue_output.json"
 
-    # first verifying the output itself and then validating
-    # if `json_issue_output` == `json_issue_output_file`
-    # avoids additional file output specific test cases
     json_issue_output = Executor(
         sample_app,
         json_output=True,
         json_output_location_arg=file_path
     )()
-    issues = loads(json_issue_output)
-
-    assert_issue_output_summary(issues["summary"])
-    assert_issue_output_rule_issues(issues["rule_issues"])
-    assert_issue_output_routes(issues["routes"])
-
-    json_issue_output_file = file_path.read_text()
-
-    # avoids assertion exceptions due missing spaces or line breaks
-    # after reading the output
-    json_issue_output.replace(" ", "").replace("\n", "")
-    json_issue_output_file.replace(" ", "").replace("\n", "")
-
-    assert json_issue_output_file
-    assert json_issue_output_file == json_issue_output
     
+    setup_and_assert_executor_json_output_file(json_issue_output, file_path)
