@@ -43,10 +43,13 @@ def assert_issue_output_rule_issues(
 
 
 def assert_issue_output_routes(
-        routes: list[dict[str, Any]],
-        with_ast: bool = False
+        routes: list[dict[str, Any]]
     ) -> None:
-    ...
+    for route in routes:
+        assert isinstance(route, dict)
+        assert isinstance(route["path"], str)
+        assert isinstance(route["endpoint"], str)
+        assert isinstance(route["name"], str)
 
 
 def test_executor_issue_output_without_ast(
@@ -86,7 +89,7 @@ def test_executor_issue_output_with_ast(
 
     assert_issue_output_summary(issues["summary"], with_ast=True)
     assert_issue_output_rule_issues(issues["rule_issues"])
-    assert_issue_output_routes(issues["routes"], with_ast=True)
+    assert_issue_output_routes(issues["routes"])
 
 
 def test_executor_json_output_env() -> None:

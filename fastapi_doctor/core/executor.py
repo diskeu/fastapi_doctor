@@ -50,6 +50,7 @@ class Executor():
             asdict(route) for route in routes
         ]
 
+        # ast enrichment doesn't take place in the output
         if self.ast_enrichment:
             merge(
                 routes,
