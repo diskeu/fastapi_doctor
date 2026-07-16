@@ -96,5 +96,39 @@ def test_executor_json_output_env() -> None:
     ...
 
 
-def test_executor_json_output_file() -> None:
-    ...
+def test_executor_json_output_file(
+    sample_app,
+    rule_subclass_factory,
+    tmp_path
+) -> None:
+    rule_subclass_factory(depend_on_ast=False)
+    rule_subclass_factory(depend_on_ast=True)
+
+    d = tmp_path / "json_output"
+    d.mkdir()
+    file_path = d / "issue_output.json"
+
+    # first verifying the output itself and then validating
+    # if `json_issue_output` == `json_issue_output_file`
+    # avoids additional file output specific test cases
+    json_issue_output = Executor(
+        sample_app,
+        json_output=True,
+        json_output_location_arg=file_path
+    )()
+    issues = loads(json_issue_output)
+
+    assert_issue_output_summary(issues["summary"])
+    assert_issue_output_rule_issues(issues["rule_issues"])
+    assert_issue_output_routes(issues["routes"])
+
+    json_issue_output_file = file_path.read_text()
+
+    # avoids assertion exceptions due missing spaces or line breaks
+    # after reading the output
+    json_issue_output.replace(" ", "").replace("\n", "")
+    json_issue_output_file.replace(" ", "").replace("\n", "")
+
+    assert json_issue_output_file
+    assert json_issue_output_file == json_issue_output
+    
