@@ -1,5 +1,6 @@
 from fastapi_doctor.core.executor import Executor
 
+import pytest
 from json import loads
 from typing import Callable, Any
 from pathlib import Path
@@ -26,7 +27,8 @@ def test_executor_issue_output(
     rule_subclass_factory,
     tmp_path
 ) -> None:
-    rule_subclass_factory()
+    rule_subclass_factory(depend_on_ast=False)
+    rule_subclass_factory(depend_on_ast=True)
 
     d = tmp_path / "sample_app_content"
     d.mkdir()
